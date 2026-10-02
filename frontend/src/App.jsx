@@ -3,13 +3,13 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Navbar from './components/Navbar';
 import ProtectedRoute from './components/ProtectedRoute';
 
-import Login from './pages/Login';
-import EmployeeDashboard from './pages/EmployeeDashboard';
-import ApplyLeave from './pages/ApplyLeave';
-import LeaveHistory from './pages/LeaveHistory';
-import AdminDashboard from './pages/AdminDashboard';
-import AdminLeaves from './pages/AdminLeaves';
-import AdminEmployees from './pages/AdminEmployees';
+import Login from './Pages/Login';
+import EmployeeDashboard from './Pages/EmployeeDashboard';
+import ApplyLeave from './Pages/ApplyLeave';
+import LeaveHistory from './Pages/LeaveHistory';
+import AdminDashboard from './Pages/AdminDashboard';
+import AdminLeaves from './Pages/AdminLeaves';
+import AdminEmployees from './Pages/AdminEmployees';
 
 function App() {
   return (
