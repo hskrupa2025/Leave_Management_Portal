@@ -15,9 +15,18 @@ const Login = () => {
         e.preventDefault();
         setError('');
         setMessage('');
+
+        // Mobile keyboards often add capital letters or a trailing space,
+        // so clean the email before sending it. Do NOT trim the password.
+        const cleanEmail = email.trim().toLowerCase();
+
         try {
             if (isRegistering) {
-                await API.post('/auth/register', { name, email, password });
+                await API.post('/auth/register', {
+                    name: name.trim(),
+                    email: cleanEmail,
+                    password,
+                });
                 setMessage('Account created. Sign in with your work email and password.');
                 setIsRegistering(false);
                 setName('');
@@ -25,7 +34,7 @@ const Login = () => {
                 return;
             }
 
-            const response = await API.post('/auth/login', { email, password });
+            const response = await API.post('/auth/login', { email: cleanEmail, password });
             localStorage.setItem('token', response.data.token);
             localStorage.setItem('user', JSON.stringify(response.data.user));
 
@@ -87,6 +96,9 @@ const Login = () => {
                             onChange={(e) => setEmail(e.target.value)}
                             placeholder="Enter email"
                             autoComplete="username"
+                            autoCapitalize="none"
+                            autoCorrect="off"
+                            spellCheck={false}
                             required
                         />
                     </div>
@@ -100,22 +112,28 @@ const Login = () => {
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             placeholder="Enter your password"
-                            autoComplete={isRegistering ? "new-password" : "current-password"}
+                            autoComplete={isRegistering ? 'new-password' : 'current-password'}
+                            autoCapitalize="none"
+                            autoCorrect="off"
                             minLength={isRegistering ? 8 : undefined}
                             required
                         />
                     </div>
 
-                    {!isRegistering && <div className="login-info-box">
-                        <h4>Instructions</h4>
-                        <ul>
-                            <li>Do not share your password with anyone</li>
-                            <li>Submit leave requests before the leave start date</li>
-                            <li>Contact HR if you need help with leave balances</li>
-                        </ul>
-                    </div>}
+                    {!isRegistering && (
+                        <div className="login-info-box">
+                            <h4>Instructions</h4>
+                            <ul>
+                                <li>Do not share your password with anyone</li>
+                                <li>Submit leave requests before the leave start date</li>
+                                <li>Contact HR if you need help with leave balances</li>
+                            </ul>
+                        </div>
+                    )}
 
-                    <button type="submit" className="login-btn">{isRegistering ? 'Create Employee Account' : 'Login'}</button>
+                    <button type="submit" className="login-btn">
+                        {isRegistering ? 'Create Employee Account' : 'Login'}
+                    </button>
                 </form>
                 <button
                     type="button"
