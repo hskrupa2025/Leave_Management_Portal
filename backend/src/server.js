@@ -1,6 +1,9 @@
+// Load environment variables FIRST, before anything reads process.env
+const dotenv = require('dotenv');
+dotenv.config();
+
 const express = require('express');
 const cors = require('cors');
-const dotenv = require('dotenv');
 const bcrypt = require('bcryptjs');
 const connectDB = require('./config/db');
 const User = require('./models/User');
@@ -8,9 +11,6 @@ const CompanyHoliday = require('./models/CompanyHoliday');
 const authRoutes = require('./routes/authRoutes');
 const leaveRoutes = require('./routes/leaveRoutes');
 const adminRoutes = require('./routes/adminRoutes');
-
-// Load environment variables
-dotenv.config();
 
 const app = express();
 
@@ -36,60 +36,76 @@ const INDIA_COMPANY_HOLIDAYS = {
     ],
 };
 
-// Middleware
-app.use(cors());
+// ---------- Middleware ----------
+// Set CLIENT_URL in Render to your Vercel URL, e.g. https://your-app.vercel.app
+// (no trailing slash). Several origins can be separated by commas.
+const allowedOrigins = process.env.CLIENT_URL
+    ? process.env.CLIENT_URL.split(',').map((o) => o.trim())
+    : null;
+
+app.use(
+    cors(
+        allowedOrigins
+            ? { origin: allowedOrigins, credentials: true }
+            : undefined // no CLIENT_URL set: allow all origins (fine for local dev)
+    )
+);
 app.use(express.json());
 
-// Seed demo users function
+// ---------- Seed demo data ----------
 const seedUsers = async () => {
     try {
         const adminEmail = 'admin@exelongmail.com';
         const employeeEmails = ['employee@exelon.com', 'employee@example.com'];
 
-        const adminExists = await User.findOne({ email: adminEmail });
-        const salt = await bcrypt.genSalt(10);
-        const adminPasswordHash = await bcrypt.hash('Admin@123', salt);
-        if (adminExists) {
-            adminExists.name = 'Exelon Admin';
-            adminExists.passwordHash = adminPasswordHash;
-            adminExists.role = 'ADMIN';
-            await adminExists.save();
-            console.log(`Seed: Admin credentials synchronized for ${adminExists.email}`);
-        } else {
+        // Admin: create only if missing. The password is reset on restart
+        // ONLY when SEED_RESET_ADMIN=true is set in the environment.
+        const admin = await User.findOne({ email: adminEmail });
+        if (!admin) {
+            const salt = await bcrypt.genSalt(10);
+            const passwordHash = await bcrypt.hash('Admin@123', salt);
             await User.create({
                 name: 'Exelon Admin',
                 email: adminEmail,
-                passwordHash: adminPasswordHash,
+                passwordHash,
                 role: 'ADMIN',
             });
             console.log(`Seed: Admin user created (${adminEmail} / Admin@123)`);
+        } else if (process.env.SEED_RESET_ADMIN === 'true') {
+            const salt = await bcrypt.genSalt(10);
+            admin.passwordHash = await bcrypt.hash('Admin@123', salt);
+            admin.role = 'ADMIN';
+            await admin.save();
+            console.log(`Seed: Admin credentials reset for ${admin.email}`);
         }
 
-        const admin = await User.findOne({ email: adminEmail });
+        // Holidays
+        const adminDoc = await User.findOne({ email: adminEmail });
         for (const [year, holidays] of Object.entries(INDIA_COMPANY_HOLIDAYS)) {
-            const yearStart = `${year}-01-01`;
-            const yearEnd = `${year}-12-31`;
             const existingCount = await CompanyHoliday.countDocuments({
-                date: { $gte: yearStart, $lte: yearEnd },
+                date: { $gte: `${year}-01-01`, $lte: `${year}-12-31` },
             });
             if (existingCount === 0) {
-                await CompanyHoliday.insertMany(holidays.map(([date, name]) => ({
-                    date,
-                    name,
-                    createdBy: admin._id,
-                })));
+                await CompanyHoliday.insertMany(
+                    holidays.map(([date, name]) => ({
+                        date,
+                        name,
+                        createdBy: adminDoc._id,
+                    }))
+                );
                 console.log(`Seed: India company holidays added for ${year}`);
             }
         }
 
+        // Demo employee
         const employeeExists = await User.findOne({ email: { $in: employeeEmails } });
         if (!employeeExists) {
             const salt = await bcrypt.genSalt(10);
-            const employeePasswordHash = await bcrypt.hash('Employee@123', salt);
+            const passwordHash = await bcrypt.hash('Employee@123', salt);
             await User.create({
                 name: 'John Employee',
                 email: 'employee@exelon.com',
-                passwordHash: employeePasswordHash,
+                passwordHash,
                 role: 'EMPLOYEE',
             });
             console.log('Seed: Employee user created (employee@exelon.com / Employee@123)');
@@ -99,24 +115,34 @@ const seedUsers = async () => {
     }
 };
 
-// Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/leaves', leaveRoutes);
-app.use('/api/admin', adminRoutes);
+// ---------- Routes ----------
+app.get('/', (req, res) => {
+    res.send('Leave Management API is running');
+});
 
-// Health check endpoint
 app.get('/api/health', (req, res) => {
     res.status(200).json({ message: 'Leave Management API is running' });
 });
 
+app.use('/api/auth', authRoutes);
+app.use('/api/leaves', leaveRoutes);
+app.use('/api/admin', adminRoutes);
+
+// 404 handler for unknown API routes (returns JSON instead of HTML)
+app.use((req, res) => {
+    res.status(404).json({ message: `Route not found: ${req.method} ${req.originalUrl}` });
+});
+
+// ---------- Start ----------
 const startServer = async () => {
     try {
         await connectDB();
-        await seedUsers();
         const PORT = process.env.PORT || 5000;
         app.listen(PORT, () => {
             console.log(`Server running on port ${PORT}`);
         });
+        // Seed after the server is listening so Render's port check passes fast
+        await seedUsers();
     } catch (error) {
         console.error(error.message);
         process.exit(1);
