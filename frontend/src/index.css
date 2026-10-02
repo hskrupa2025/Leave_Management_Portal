@@ -1,0 +1,435 @@
+:root {
+  --primary: #4f46e5;
+  --primary-dark: #312e81;
+  --secondary: #22c55e;
+  --bg-dark: #0f172a;
+  --bg-soft: #111827;
+  --card-bg: rgba(17, 24, 39, 0.7);
+  --line: rgba(255, 255, 255, 0.12);
+  --text: #e5e7eb;
+  --muted: #a5b4cf;
+  --white: #ffffff;
+  --shadow: 0 20px 45px rgba(15, 23, 42, 0.45);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100%;
+  min-height: 100vh;
+  width: 100%;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #0f172a 0%, #111827 30%, #1e1b4b 100%);
+  color: var(--text);
+}
+
+body {
+  min-height: 100vh;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+.login-shell {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 20px;
+  background:
+    radial-gradient(circle at top left, rgba(99, 102, 241, 0.4), transparent 35%),
+    radial-gradient(circle at bottom right, rgba(34, 197, 94, 0.18), transparent 30%),
+    linear-gradient(135deg, #0f172a 0%, #111827 35%, #1f2937 100%);
+}
+
+.login-panel {
+  width: min(100%, 500px);
+  background: rgba(15, 23, 42, 0.72);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  backdrop-filter: blur(14px);
+  box-shadow: var(--shadow);
+  padding: 34px 30px;
+  transform: translateY(0);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.login-panel:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 28px 60px rgba(79, 70, 229, 0.22);
+  border-color: rgba(99, 102, 241, 0.5);
+}
+
+.login-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.login-badge {
+  width: 42px;
+  height: 42px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--primary) 0%, #8b5cf6 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  box-shadow: 0 12px 25px rgba(79, 70, 229, 0.4);
+}
+
+.login-title {
+  margin: 0;
+  color: var(--white);
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.login-subtitle {
+  text-align: center;
+  color: var(--muted);
+  margin-bottom: 24px;
+  font-size: 0.95rem;
+}
+
+.login-info-box {
+  background: rgba(79, 70, 229, 0.12);
+  border: 1px solid rgba(129, 140, 248, 0.35);
+  border-radius: 14px;
+  padding: 12px 14px;
+  margin-bottom: 18px;
+}
+
+.login-info-box h4 {
+  margin: 0 0 8px;
+  color: #dfe7ff;
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.login-info-box ul {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--muted);
+  font-size: 0.88rem;
+  line-height: 1.7;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.login-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.login-label {
+  color: var(--muted);
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.login-input {
+  width: 100%;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  background: rgba(15, 23, 42, 0.75);
+  color: var(--white);
+  border-radius: 12px;
+  padding: 0.9rem 1rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.login-input::placeholder {
+  color: rgba(226, 232, 240, 0.45);
+}
+
+.login-input:focus {
+  outline: none;
+  border-color: rgba(99, 102, 241, 0.85);
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.18);
+  transform: translateY(-1px);
+}
+
+.login-btn {
+  margin-top: 6px;
+  border: none;
+  border-radius: 12px;
+  padding: 0.95rem 1rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: var(--white);
+  background: linear-gradient(135deg, var(--primary) 0%, #7c3aed 100%);
+  box-shadow: 0 15px 25px rgba(79, 70, 229, 0.32);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+.login-btn:hover {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 18px 35px rgba(79, 70, 229, 0.4);
+  filter: brightness(1.04);
+}
+
+.login-btn:active {
+  transform: translateY(0);
+}
+
+.login-alert {
+  padding: 0.8rem 1rem;
+  border-radius: 12px;
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #fecaca;
+  font-size: 0.92rem;
+}
+
+.login-success {
+  padding: 0.8rem 1rem;
+  border-radius: 12px;
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  color: #bbf7d0;
+  font-size: 0.92rem;
+}
+
+.login-mode-toggle {
+  display: block;
+  margin: 18px auto 0;
+  padding: 8px 12px;
+  border: 0;
+  background: transparent;
+  color: #c7d2fe;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.login-mode-toggle:hover {
+  color: var(--white);
+}
+
+.leave-application-page {
+  max-width: 1600px;
+}
+
+.leave-weekend-note {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.year-calendar-panel {
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: rgba(15, 23, 42, 0.68);
+  box-shadow: var(--shadow);
+}
+
+.year-calendar-heading,
+.year-calendar-legend {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.year-calendar-heading h3 {
+  margin: 0;
+  color: var(--white);
+  font-size: 1.2rem;
+}
+
+.year-calendar-heading p {
+  margin: 5px 0 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.year-calendar-controls {
+  display: flex;
+  gap: 6px;
+}
+
+.year-calendar-controls button {
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--white);
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.year-calendar-controls button:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.year-calendar-legend {
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  margin: 18px 0;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.year-calendar-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.calendar-legend-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #94a3b8;
+}
+
+.calendar-legend-dot.pending {
+  background: #fbbf24;
+}
+
+.calendar-legend-dot.approved {
+  background: #34d399;
+}
+
+.calendar-legend-dot.weekend {
+  background: #64748b;
+}
+
+.calendar-legend-dot.company {
+  background: #ef4444;
+}
+
+.year-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px 12px;
+}
+
+.mini-month h4 {
+  margin: 0 0 6px;
+  color: #e2e8f0;
+  font-size: 0.82rem;
+  font-weight: 650;
+}
+
+.mini-month-days {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 2px;
+}
+
+.mini-weekday,
+.mini-day {
+  display: flex;
+  width: 100%;
+  aspect-ratio: 1;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  border-radius: 4px;
+  color: #dbe4f0;
+  font-size: 0.68rem;
+  line-height: 1;
+}
+
+.mini-weekday {
+  color: #93a4ba;
+  font-size: 0.62rem;
+  font-weight: 600;
+}
+
+button.mini-day {
+  background: transparent;
+  cursor: pointer;
+}
+
+button.mini-day:hover:not(:disabled) {
+  outline: 1px solid #a5b4fc;
+  background: rgba(165, 180, 252, 0.16);
+}
+
+.mini-day.weekend {
+  background: rgba(100, 116, 139, 0.2);
+  color: #8290a3;
+}
+
+.mini-day.company-holiday {
+  background: rgba(239, 68, 68, 0.3);
+  color: #fecaca;
+  font-weight: 700;
+  box-shadow: inset 0 0 0 1px rgba(248, 113, 113, 0.55);
+}
+
+.mini-day.past {
+  color: #667085;
+}
+
+.mini-day.leave-pending {
+  background: rgba(251, 191, 36, 0.26);
+  color: #fde68a;
+}
+
+.mini-day.leave-approved {
+  background: rgba(52, 211, 153, 0.25);
+  color: #a7f3d0;
+}
+
+.mini-day.leave-rejected {
+  background: rgba(248, 113, 113, 0.18);
+  color: #fecaca;
+}
+
+.mini-day.selected-range {
+  outline: 1px solid #a5b4fc;
+  background: rgba(99, 102, 241, 0.48);
+  color: white;
+}
+
+.mini-day:disabled {
+  cursor: not-allowed;
+}
+
+@media (max-width: 576px) {
+  .login-panel {
+    padding: 24px 18px;
+    border-radius: 18px;
+  }
+
+  .login-title {
+    font-size: 1.7rem;
+  }
+
+  .year-calendar-panel {
+    padding: 16px 12px;
+  }
+
+  .year-calendar-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px 10px;
+  }
+
+  .mini-day {
+    font-size: 0.72rem;
+  }
+}
