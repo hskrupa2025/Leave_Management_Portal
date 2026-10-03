@@ -3,11 +3,13 @@
 A web application for Exelon employees to request and track leave, and for administrators to review requests and manage employee records. Leave data and account records are stored in MongoDB through the Express API.
 
 ## Project Status
-
-- **Live deployment:** Not deployed yet. No production frontend or API URL is configured in this repository.
-- **Local frontend:** `http://localhost:5173`
-- **Local API:** `http://localhost:5000/api`
-- **Health check:** `http://localhost:5000/api/health`
+-  Live Deployment: Deployed successfully.
+-  Frontend (Vercel): https://leave-management-portal-mr24.vercel.app/
+-  Backend (Render): Deployed on Render.
+- Local frontend: `http://localhost:5173`
+- Local API: `http://localhost:5000/api`
+- Health check: `http://localhost:5000/api/health`
+  
 
 ## Features
 
@@ -36,7 +38,7 @@ The frontend handles login, employee leave workflows, admin dashboards, and the 
 - **Frontend:** React 19, Vite 8, React Router, Axios, Bootstrap 5
 - **Backend:** Node.js, Express 5, Mongoose 9, JSON Web Tokens, bcryptjs
 - **Database:** MongoDB Atlas
-- **Tests:** Node.js built-in test runner
+- **Tests:** Node.js built-in test runner, Postmann
 
 Use Node.js 20.19+ or 22.12+ and npm.
 
@@ -117,8 +119,8 @@ On backend startup, the current seed logic creates or resets this administrator 
 
 - Email: `admin@exelongmail.com`
 - Password: `Admin@123`
-
-The password is reset by the seed logic each time the backend starts. This credential is for local development only. Change the seed behavior and use a secure administrator provisioning process before deployment.
+  
+Admin Login Credentials: Use the above credentials to access the administrator dashboard.
 
 Employee accounts can be created from the login page with an `@exelon.com` address and a password of at least 8 characters. Registration creates employee accounts only.
 
@@ -147,18 +149,13 @@ All API routes use the `/api` prefix. Protected routes require `Authorization: B
 ### Admin routes
 
 All `/api/admin` routes require an authenticated administrator.
-
-| Method   | Path                            | Purpose                                           |
-| -------- | ------------------------------- | ------------------------------------------------- |
-| `GET`    | `/api/admin/dashboard`          | Dashboard totals and recent requests.             |
-| `GET`    | `/api/admin/leaves`             | List all leave requests.                          |
-| `PUT`    | `/api/admin/leaves/:id/approve` | Approve a pending request and deduct its balance. |
-| `PUT`    | `/api/admin/leaves/:id/reject`  | Reject a pending request.                         |
-| `GET`    | `/api/admin/employees`          | List employees and leave balances.                |
-| `GET`    | `/api/admin/holidays?year=2026` | List company holidays for a year.                 |
-| `POST`   | `/api/admin/holidays`           | Add a company holiday (`date`, `name`).           |
-| `DELETE` | `/api/admin/holidays/:id`       | Remove a company holiday.                         |
-
+| Method | Path | Purpose |
+| ------ | ---- | ------- |
+| `GET` | `/api/admin/dashboard` | Dashboard totals and recent requests. |
+| `GET` | `/api/admin/leaves` | List all leave requests. |
+| `PUT` | `/api/admin/leaves/:id/approve` | Approve a pending request and deduct its balance. |
+| `PUT` | `/api/admin/leaves/:id/reject` | Reject a pending request. |
+| `GET` | `/api/admin/employees` | List employees and leave balances. |
 ## Tests
 
 From `backend`, run the current regression suites directly:
