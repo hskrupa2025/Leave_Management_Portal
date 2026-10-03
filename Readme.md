@@ -1,6 +1,6 @@
 # Leave Management Portal
 
-A web application for Exelon employees to request and track leave, and for administrators to review requests and manage employee records. Leave data and account records are stored in MongoDB through the Express API.
+A FullStack application for Exelon employees to request and track leave, and for administrators to review requests and manage employee records. Leave data and account records are stored in MongoDB through the Express API.
 
 ## Project Status
 -  Live Deployment: Deployed successfully.
